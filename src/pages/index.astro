@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatusPill from '../components/StatusPill.astro';
+import { drugs } from '../data/drugs';
+import '../styles/global.css';
+
+const selectedDrug = drugs[0];
+---
+
+<BaseLayout>
+  <div class="workspace">
+    <aside class="rail" aria-label="Navegación principal">
+      <a class="brand-mark" href="#inicio" aria-label="Ritmos, inicio">R<span>.</span></a>
+      <div class="rail-rule"></div>
+      <a class="rail-link active" href="#calculadora" aria-label="Calculadora" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 7.5h7M8.5 11h2m3 0h2m-7 3.5h2m3 0h2m-7 3h2m3 0h2"/></svg>
+      </a>
+      <div class="rail-bottom"><span class="status-light"></span></div>
+    </aside>
+
+    <main id="inicio" class="main-area">
+      <header class="topbar">
+        <div class="brand-name">Ritmos <span>·</span> Perfusión</div>
+        <div class="top-meta"><span class="system-dot"></span> Herramienta de cálculo <span class="meta-divider"></span> v0.1</div>
+      </header>
+
+      <section class="page-heading" id="calculadora">
+        <div>
+          <p class="eyebrow">Calculadora de administración</p>
+          <h1>Ritmos de perfusión</h1>
+          <p class="intro">Configura una administración para consultar su pauta de velocidad.</p>
+        </div>
+        <div class="heading-index"><span>01</span><i></i><span>ENTRADA</span></div>
+      </section>
+
+      <div class="content-grid">
+        <section class="input-panel" aria-labelledby="input-title">
+          <div class="panel-head">
+            <div><span class="section-kicker">Datos de administración</span><h2 id="input-title">Parámetros</h2></div>
+            <span class="required-note"><span>*</span> Campos obligatorios</span>
+          </div>
+
+          <form class="form-body">
+            <label class="field field-wide">
+              <span class="field-label">Fármaco <b>*</b></span>
+              <span class="select-wrap">
+                <select name="drug" required aria-label="Nombre del fármaco">
+                  {drugs.map((drug) => <option value={drug.id}>{drug.name}</option>)}
+                </select>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+              </span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Dosis <b>*</b></span>
+              <span class="input-wrap"><input name="doseMg" type="number" min="0" step="any" placeholder="0" required /><span class="unit">mg</span></span>
+            </label>
+
+            <label class="field">
+              <span class="field-label">Volumen de perfusión <b>*</b></span>
+              <span class="input-wrap"><input name="volumeMl" type="number" min="0" step="any" placeholder="0" required /><span class="unit">mL</span></span>
+            </label>
+
+            <label class="field field-wide">
+              <span class="field-label">Número de administración <b>*</b></span>
+              <span class="input-wrap"><input name="administrationNumber" type="number" min="1" step="1" placeholder="Ej. 1" required /><span class="unit">n.º</span></span>
+            </label>
+
+            <div class="form-actions">
+              <button type="button" class="primary-button" disabled>Calcular ritmo <span aria-hidden="true">↗</span></button>
+              <span class="form-hint">El cálculo estará disponible al incorporar el protocolo validado.</span>
+            </div>
+          </form>
+          <div class="panel-foot"><span class="foot-mark">i</span><p>Los valores se usan para generar una pauta específica de esta administración.</p></div>
+        </section>
+
+        <section class="result-panel" aria-labelledby="result-title" aria-live="polite">
+          <div class="result-topline"><span class="section-kicker">Salida del cálculo</span><span class="result-code">R–00</span></div>
+          <div class="result-empty">
+            <div class="chart-icon" aria-hidden="true">
+              <svg viewBox="0 0 112 76"><path class="chart-grid" d="M8 10v56h96M8 52h96M8 38h96M8 24h96"/><path class="chart-dash" d="M14 56h19v-8h19V36h19V24h19V13"/><circle cx="14" cy="56" r="2.5"/><circle cx="33" cy="48" r="2.5"/><circle cx="52" cy="36" r="2.5"/><circle cx="71" cy="24" r="2.5"/><circle cx="90" cy="13" r="2.5"/></svg>
+            </div>
+            <p class="empty-label">Esperando protocolo</p>
+            <h2 id="result-title">Aún no hay una pauta disponible</h2>
+            <p class="empty-copy">La ficha de rituximab está preparada para configurarse. Añadiremos aquí los tramos de velocidad cuando se incorpore su protocolo.</p>
+          </div>
+          <div class="result-footer"><span>Rituximab</span><StatusPill>Protocolo pendiente de validación</StatusPill></div>
+        </section>
+      </div>
+
+      <footer class="page-footer"><span>Ritmos de perfusión</span><span>Protocolo y cálculo <i>·</i> en preparación</span></footer>
+    </main>
+  </div>
+</BaseLayout>
